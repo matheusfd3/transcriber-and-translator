@@ -34,6 +34,3 @@ Este projeto foi desenvolvido por [matheusfd3](https://github.com/matheusfd3)
 
 ## Licença
 Este projeto é distribuído sob a licença MIT.
-
-## Screenshots
-![App Screenshot](https://github.com/matheusfd3/transcriber-and-translator/blob/main/.github/image01.png)
