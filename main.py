@@ -2,18 +2,18 @@
 Python 3.12.10
 '''
 
-from datetime import datetime, timezone, timedelta
+from datetime import datetime, timedelta, timezone
 from queue import Queue
-from time import sleep
 from sys import platform
-from deep_translator import GoogleTranslator
+from time import sleep
 
 import argparse
 import threading
 import numpy as np
 import speech_recognition as sr
-import whisper
 import torch
+import whisper
+from deep_translator import GoogleTranslator
 
 from ui import UI
 
