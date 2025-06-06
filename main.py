@@ -21,7 +21,7 @@ def main():
     parser = argparse.ArgumentParser()
     parser.add_argument(
         "--model",
-        default="base",
+        default="tiny",
         help="Model to use",
         choices=["tiny", "base", "small", "medium", "large"]
     )
@@ -32,7 +32,7 @@ def main():
     )
     parser.add_argument(
         "--energy_threshold",
-        default=600,
+        default=300,
         help="Energy level for mic to detect.",
         type=int
     )
