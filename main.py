@@ -6,10 +6,10 @@ from datetime import datetime, timedelta
 from queue import Queue
 from time import sleep
 from sys import platform
+from deep_translator import GoogleTranslator
 
 import argparse
 import threading
-import os
 import numpy as np
 import speech_recognition as sr
 import whisper
@@ -32,7 +32,7 @@ def main():
     )
     parser.add_argument(
         "--energy_threshold",
-        default=1000,
+        default=600,
         help="Energy level for mic to detect.",
         type=int
     )
@@ -65,6 +65,7 @@ def main():
     data_queue = Queue()
     phrase_bytes = bytes()
     transcription = ['']
+    translation = ['']
 
     recorder = sr.Recognizer()
     recorder.energy_threshold = args.energy_threshold
@@ -88,6 +89,8 @@ def main():
     model = args.model
     if args.model != "large" and not args.non_english:
         model = model + ".en"
+
+    source_lang = 'en' if model.endswith('.en') else 'auto'
     audio_model = whisper.load_model(model)
 
     record_timeout = args.record_timeout
@@ -129,19 +132,17 @@ def main():
 
                     audio_np = np.frombuffer(phrase_bytes, dtype=np.int16).astype(np.float32) / 32768.0
                     result = audio_model.transcribe(audio_np, fp16=torch.cuda.is_available())
-                    text = "\n- " + result['text'].strip()
+                    text = result['text'].strip()
 
                     if phrase_complete:
-                        transcription.append(text)
+                        transcription.append('\n- ' + text)
+                        translation.append('\n- ' + GoogleTranslator(source=source_lang, target='pt').translate(text))
                     else:
-                        transcription[-1] = text
+                        transcription[-1] = '\n- ' + text
+                        translation[-1] = '\n- ' + GoogleTranslator(source=source_lang, target='pt').translate(text)
 
                     ui.update_transcription('\n'.join(transcription))
-
-                    os.system('cls' if os.name == 'nt' else 'clear')
-                    for line in transcription:
-                        print(line)
-                    print('', end='', flush=True)
+                    ui.update_translation('\n'.join(translation))
                 else:
                     sleep(0.25)
             except KeyboardInterrupt:
