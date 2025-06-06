@@ -2,7 +2,7 @@
 Python 3.12.10
 '''
 
-from datetime import datetime, timedelta
+from datetime import datetime, timezone, timedelta
 from queue import Queue
 from time import sleep
 from sys import platform
@@ -117,7 +117,7 @@ def main():
 
         while True:
             try:
-                now = datetime.utcnow()
+                now = datetime.now(timezone.utc)
                 if not data_queue.empty():
                     phrase_complete = False
                     if phrase_time and now - phrase_time > timedelta(seconds=phrase_timeout):
@@ -147,10 +147,6 @@ def main():
                     sleep(0.25)
             except KeyboardInterrupt:
                 break
-
-        print("\n\nTranscription:")
-        for line in transcription:
-            print(line)
 
     # Cria a thread da transcrição
     transcription_thread = threading.Thread(target=background_loop, daemon=True)
