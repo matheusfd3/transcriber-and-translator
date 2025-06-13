@@ -101,7 +101,6 @@ def main():
                         transcription.append('\n- ' + text)
                         translated = GoogleTranslator(source=source_lang, target='pt').translate(text)
                         translation.append('\n- ' + translated)
-                        buffer_audio = bytes()  # limpa buffer se frase final
                     else:
                         transcription[-1] = '\n- ' + text
 
