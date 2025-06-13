@@ -22,7 +22,7 @@ def main():
     parser.add_argument("--model", default="tiny", choices=["tiny", "base", "small", "medium", "large"])
     parser.add_argument("--non_english", action='store_true', help="Don't use the English-only model.")
     parser.add_argument("--energy_threshold", default=300, type=int)
-    parser.add_argument("--record_timeout", default=2, type=float)
+    parser.add_argument("--record_timeout", default=1, type=float)
     parser.add_argument("--phrase_timeout", default=3, type=float)
 
     if 'linux' in platform:
@@ -103,6 +103,8 @@ def main():
                         translation.append('\n- ' + translated)
                     else:
                         transcription[-1] = '\n- ' + text
+                        translated = GoogleTranslator(source=source_lang, target='pt').translate(text)
+                        translation[-1] = '\n- ' + translated
 
                     ui.update_transcription('\n'.join(transcription))
                     ui.update_translation('\n'.join(translation))
